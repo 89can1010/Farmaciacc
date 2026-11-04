@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- CAMBIA el nombre de la tienda aca y en el <h1> -->
+  <title>FARMACIA PROYECTO </title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+  <header class="barra">
+    <h1 class="marca">FARMACIA CC </h1>
+    <div class="sesion">
+      <span id="saludo"></span>
+      <button id="btn-ingresar" class="btn btn-claro" onclick="abrirModal()">Ingresar</button>
+      <button id="btn-salir" class="btn btn-claro oculto" onclick="cerrarSesion()">Salir</button>
+      <button class="btn btn-carrito" onclick="alternarCarrito()">
+        Carrito <span id="contador" class="contador">0</span>
+      </button>
+    </div>
+  </header>
+
+  <div id="mensaje" class="mensaje oculto"></div>
+
+  <main class="contenido">
+    <nav id="categorias" class="categorias"></nav>
+    <section id="productos" class="grilla">
+      <p class="vacio">Cargando productos...</p>
+    </section>
+  </main>
+
+  <!-- CARRITO: panel lateral -->
+  <aside id="carrito" class="carrito oculto">
+    <div class="carrito-cabecera">
+      <h2>Tu carrito</h2>
+      <button class="btn-cerrar" onclick="alternarCarrito()">×</button>
+    </div>
+    <ul id="carrito-lista" class="carrito-lista"></ul>
+    <div class="carrito-pie">
+      <p>Total estimado: <strong id="carrito-total">$0</strong></p>
+      <button class="btn btn-principal" onclick="comprar()">Comprar</button>
+    </div>
+  </aside>
+
+ <!-- LOGIN / REGISTRO: ventana modal -->
+  <div id="modal" class="modal oculto">
+    <div class="modal-caja">
+      <button class="btn-cerrar" onclick="cerrarModal()">×</button>
+
+      <form id="form-login" onsubmit="iniciarSesion(event)">
+        <h2>Ingresar</h2>
+        <input id="login-email" type="email" placeholder="Email" required>
+        <input id="login-password" type="password" placeholder="Contraseña" required>
+        <button class="btn btn-principal" type="submit">Ingresar</button>
+        <p class="cambiar">¿No tenés cuenta? <a href="#" onclick="mostrarRegistro(true)">Registrate</a></p>
+      </form>
+
+      <form id="form-registro" class="oculto" onsubmit="registrar(event)">
+        <h2>Crear cuenta</h2>
+        <input id="reg-nombre" type="text" placeholder="Nombre" required>
+        <input id="reg-email" type="email" placeholder="Email" required>
+        <input id="reg-password" type="password" placeholder="Contraseña (mínimo 6)" minlength="6" required>
+        <button class="btn btn-principal" type="submit">Registrarme</button>
+        <p class="cambiar">¿Ya tenés cuenta? <a href="#" onclick="mostrarRegistro(false)">Ingresá</a></p>
+      </form>
+    </div>
+  </div>
+
+ <!-- MODAL DE PAGO / TARJETA -->
+  <div id="modal-pago" class="modal oculto">
+    <div class="modal-caja">
+      <button class="btn-cerrar" onclick="cerrarModalPago()">×</button>
+      <form id="form-pago" onsubmit="procesarPago(event)">
+        <h2>Datos de la Tarjeta</h2>
+        
+        <label for="tarjeta-nombre">Nombre en la tarjeta</label>
+        <input type="text" id="tarjeta-nombre" required placeholder="Ej: Juan Pérez">
+
+        <label for="tarjeta-numero">Número de tarjeta (16 dígitos)</label>
+        <input type="text" id="tarjeta-numero" required placeholder="1234567890123456" maxlength="16" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+
+        <label for="tarjeta-vencimiento">Vencimiento (MM/AA)</label>
+        <input type="text" id="tarjeta-vencimiento" required placeholder="MMAA" maxlength="4" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+
+        <label for="tarjeta-cvv">CVV (3 dígitos)</label>
+        <input type="text" id="tarjeta-cvv" required placeholder="123" maxlength="3" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+
+        <button type="submit" class="btn btn-principal">Confirmar Pago</button>
+        <button type="button" class="btn btn-secundario" onclick="cerrarModalPago()" style="margin-top: 10px;">Cancelar</button>
+      </form>
+    </div>
+  </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
+      
+    </div>
+  </div>
+
+
+  
+  <script src="app.js"></script>
+</body>
+</html>
