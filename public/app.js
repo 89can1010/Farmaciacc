@@ -81,7 +81,18 @@ function guardarCarrito() {
 }
 
 function agregar(id) {
+  const p = catalogo[id];
   const item = carrito.find(i => i.producto_id === id);
+  const cantidadActual = item ? item.cantidad : 0;
+
+  // No dejamos superar el stock que nos devolvió el servidor
+  if (p && cantidadActual >= p.stock) {
+    const mensaje = p.stock < 1
+      ? `"${p.nombre}" no tiene stock`
+      : `No hay más stock de "${p.nombre}". Quedan ${p.stock}.`;
+    return mostrarMensaje(mensaje, 'error');
+  }
+
   if (item) item.cantidad++;
   else carrito.push({ producto_id: id, cantidad: 1 });
   guardarCarrito();
@@ -91,6 +102,15 @@ function agregar(id) {
 function cambiarCantidad(id, cambio) {
   const item = carrito.find(i => i.producto_id === id);
   if (!item) return;
+
+  // Al sumar, respetamos el stock disponible
+  if (cambio > 0) {
+    const p = catalogo[id];
+    if (p && item.cantidad >= p.stock) {
+      return mostrarMensaje(`No hay más stock de "${p.nombre}". Quedan ${p.stock}.`, 'error');
+    }
+  }
+
   item.cantidad += cambio;
   if (item.cantidad < 1) carrito = carrito.filter(i => i.producto_id !== id);
   guardarCarrito();

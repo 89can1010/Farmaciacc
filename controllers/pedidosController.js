@@ -1,25 +1,28 @@
-const supabase = require('../config/supabaseClient');
+// CONTROLLER DE PEDIDOS
+const model = require('../models/pedidosModel');
 
 async function crearPedido(req, res) {
   const carrito = req.body;
-  
-  // El usuario autenticado viene del middleware verificarUsuario
-  const usuarioId = req.usuario ? req.usuario.id : null; 
 
-  if (!carrito || !Array.isArray(carrito) || carrito.length === 0) {
-    return res.status(400).json({ error: 'El carrito está vacío o es inválido' });
+  // El usuario autenticado viene del middleware verificarUsuario
+  const usuarioId = req.usuario ? req.usuario.id : null;
+
+  if (!usuarioId) {
+    return res.status(401).json({ error: 'Necesitás iniciar sesión para comprar' });
   }
 
   try {
-    // Aquí puedes agregar la lógica para guardar el pedido en Supabase o descontar stock si lo deseas.
-    // Por ahora, respondemos con éxito en formato JSON para que el frontend cierre la compra perfectamente:
+    const { total } = await model.crearPedido(usuarioId, carrito);
 
-    return res.status(201).json({ 
-      exito: true, 
-      mensaje: '¡Compra registrada con éxito!' 
+    return res.status(201).json({
+      exito: true,
+      mensaje: '¡Compra registrada con éxito!',
+      total,
     });
-
   } catch (error) {
+    if (error.status) {
+      return res.status(error.status).json({ error: error.message });
+    }
     console.error('Error al procesar el pedido:', error);
     return res.status(500).json({ error: 'Hubo un error al procesar el pedido' });
   }
